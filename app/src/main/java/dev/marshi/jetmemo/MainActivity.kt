@@ -11,8 +11,11 @@ import androidx.navigation.NavHostController
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
+import dev.marshi.jetmemo.ui.NavControllerWrapper
+import dev.marshi.jetmemo.ui.NavControllerWrapperImpl
 import dev.marshi.jetmemo.ui.memodetail.MemoDetail
 import dev.marshi.jetmemo.ui.memolist.MemoList
+import dev.marshi.jetmemo.ui.memolist.MemoListScreen
 import dev.marshi.jetmemo.ui.theme.JetMemoTheme
 
 class MainActivity : ComponentActivity() {
@@ -20,14 +23,10 @@ class MainActivity : ComponentActivity() {
         super.onCreate(savedInstanceState)
         setContent {
             val navController = rememberNavController()
-            CompositionLocalProvider(
-                LocalNavController provides navController
-            ) {
-                JetMemoTheme {
-                    // A surface container using the 'background' color from the theme
-                    Surface(color = MaterialTheme.colors.background) {
-                        NavHost(navHostController = navController)
-                    }
+            JetMemoTheme {
+                // A surface container using the 'background' color from the theme
+                Surface(color = MaterialTheme.colors.background) {
+                    NavHost(navHostController = navController)
                 }
             }
         }
@@ -38,7 +37,7 @@ class MainActivity : ComponentActivity() {
 fun NavHost(navHostController: NavHostController) {
     NavHost(navController = navHostController, startDestination = "memolist") {
         composable(NavDestination.MemoList.dest) {
-            MemoList()
+            MemoListScreen(NavControllerWrapperImpl(navHostController))
         }
         composable(NavDestination.MemoDetail.dest) {
             MemoDetail()
@@ -51,6 +50,6 @@ enum class NavDestination(val dest: String) {
     MemoDetail("detail")
 }
 
-val LocalNavController = staticCompositionLocalOf<NavController> {
-    error("no such navController")
-}
+//val LocalNavController = staticCompositionLocalOf<NavController?> {
+//    null
+//}
