@@ -13,6 +13,7 @@ import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
 import dev.marshi.jetmemo.ui.NavControllerWrapper
 import dev.marshi.jetmemo.ui.NavControllerWrapperImpl
+import dev.marshi.jetmemo.ui.Screen
 import dev.marshi.jetmemo.ui.memodetail.MemoDetail
 import dev.marshi.jetmemo.ui.memolist.MemoList
 import dev.marshi.jetmemo.ui.memolist.MemoListScreen
@@ -36,20 +37,12 @@ class MainActivity : ComponentActivity() {
 @Composable
 fun NavHost(navHostController: NavHostController) {
     NavHost(navController = navHostController, startDestination = "memolist") {
-        composable(NavDestination.MemoList.dest) {
+        composable(Screen.MemoList.route) {
             MemoListScreen(NavControllerWrapperImpl(navHostController))
         }
-        composable(NavDestination.MemoDetail.dest) {
+        composable(Screen.MemoDetail.route) {
             MemoDetail()
         }
     }
 }
 
-enum class NavDestination(val dest: String) {
-    MemoList("memolist"),
-    MemoDetail("detail")
-}
-
-//val LocalNavController = staticCompositionLocalOf<NavController?> {
-//    null
-//}

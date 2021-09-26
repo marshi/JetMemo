@@ -8,9 +8,9 @@ import androidx.compose.material.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.tooling.preview.Preview
-import dev.marshi.jetmemo.NavDestination
 import dev.marshi.jetmemo.ui.NavControllerWrapper
 import dev.marshi.jetmemo.ui.NavControllerWrapperForPreview
+import dev.marshi.jetmemo.ui.Screen
 import dev.marshi.jetmemo.ui.theme.JetMemoTheme
 
 
@@ -22,11 +22,11 @@ fun MemoListScreen(navController: NavControllerWrapper) {
 @Composable
 fun MemoList(navController: NavControllerWrapper) {
     LazyColumn {
-        repeat(10) {
+        repeat(100) {
             item {
                 MemoLine(modifier = Modifier.clickable {
                     navController.navigate(
-                        NavDestination.MemoDetail.dest
+                        Screen.MemoDetail.route
                     )
                 })
             }
