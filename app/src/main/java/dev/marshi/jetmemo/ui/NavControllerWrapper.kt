@@ -4,6 +4,7 @@ import androidx.navigation.NavController
 
 interface NavControllerWrapper {
     fun navigate(route: String)
+    fun popBackStack()
 }
 
 class NavControllerWrapperImpl(
@@ -12,11 +13,19 @@ class NavControllerWrapperImpl(
     override fun navigate(route: String) {
         navController.navigate(route)
     }
+
+    override fun popBackStack() {
+        navController.popBackStack()
+    }
 }
 
 class NavControllerWrapperForPreview(
 ) : NavControllerWrapper {
     override fun navigate(route: String) {
         // do nothing
+    }
+
+    override fun popBackStack() {
+       // do nothing
     }
 }
