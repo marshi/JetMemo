@@ -36,7 +36,7 @@ class MainActivity : ComponentActivity() {
 
 @Composable
 fun NavHost(navHostController: NavHostController) {
-    NavHost(navController = navHostController, startDestination = "memolist") {
+    NavHost(navController = navHostController, startDestination = Screen.MemoList.route) {
         composable(Screen.MemoList.route) {
             MemoListScreen(NavControllerWrapperImpl(navHostController))
         }

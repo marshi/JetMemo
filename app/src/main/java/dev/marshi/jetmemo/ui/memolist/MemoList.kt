@@ -13,7 +13,6 @@ import dev.marshi.jetmemo.ui.NavControllerWrapperForPreview
 import dev.marshi.jetmemo.ui.Screen
 import dev.marshi.jetmemo.ui.theme.JetMemoTheme
 
-
 @Composable
 fun MemoListScreen(navController: NavControllerWrapper) {
     MemoList(navController)
