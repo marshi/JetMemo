@@ -11,6 +11,7 @@ import androidx.navigation.NavHostController
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
+import dagger.hilt.android.AndroidEntryPoint
 import dev.marshi.jetmemo.ui.NavControllerWrapper
 import dev.marshi.jetmemo.ui.NavControllerWrapperImpl
 import dev.marshi.jetmemo.ui.Screen
@@ -19,6 +20,7 @@ import dev.marshi.jetmemo.ui.memolist.MemoList
 import dev.marshi.jetmemo.ui.memolist.MemoListScreen
 import dev.marshi.jetmemo.ui.theme.JetMemoTheme
 
+@AndroidEntryPoint
 class MainActivity : ComponentActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)

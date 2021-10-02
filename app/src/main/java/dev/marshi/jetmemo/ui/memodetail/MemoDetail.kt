@@ -26,7 +26,6 @@ fun MemoDetailScreen(navControllerWrapper: NavControllerWrapper) {
 
 @Composable
 fun MemoDetail(navControllerWrapper: NavControllerWrapper) {
-    val titleTextState = remember { mutableStateOf(TextFieldValue()) }
     val memoTextState = remember { mutableStateOf(TextFieldValue()) }
     Column {
         TopAppBar(
@@ -43,13 +42,6 @@ fun MemoDetail(navControllerWrapper: NavControllerWrapper) {
                     Text("保存", color = Color.Black)
                 }
             },
-        )
-        TextField(
-            value = titleTextState.value,
-            onValueChange = { titleTextState.value = it },
-            singleLine = true,
-            modifier = Modifier
-                .fillMaxWidth()
         )
         TextField(
             value = memoTextState.value,
