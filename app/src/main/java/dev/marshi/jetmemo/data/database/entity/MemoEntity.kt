@@ -5,7 +5,16 @@ import androidx.room.Entity
 import androidx.room.PrimaryKey
 
 @Entity
-data class Memo(
+data class MemoEntity(
     @PrimaryKey(autoGenerate = true) val id: Int,
     @ColumnInfo(name = "text") val text: String?
-)
+) {
+    companion object {
+        fun from(text: String): MemoEntity {
+            return MemoEntity(
+                id = 0,
+                text = text,
+            )
+        }
+    }
+}

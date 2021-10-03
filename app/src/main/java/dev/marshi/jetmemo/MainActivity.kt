@@ -6,21 +6,17 @@ import androidx.activity.compose.setContent
 import androidx.compose.material.MaterialTheme
 import androidx.compose.material.Surface
 import androidx.compose.runtime.*
-import androidx.navigation.NavController
 import androidx.navigation.NavHostController
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
 import dagger.hilt.android.AndroidEntryPoint
-import dev.marshi.jetmemo.data.database.AppDatabase
-import dev.marshi.jetmemo.ui.NavControllerWrapper
 import dev.marshi.jetmemo.ui.NavControllerWrapperImpl
 import dev.marshi.jetmemo.ui.Screen
 import dev.marshi.jetmemo.ui.memodetail.MemoDetail
-import dev.marshi.jetmemo.ui.memolist.MemoList
+import dev.marshi.jetmemo.ui.memodetail.MemoDetailScreen
 import dev.marshi.jetmemo.ui.memolist.MemoListScreen
 import dev.marshi.jetmemo.ui.theme.JetMemoTheme
-import javax.inject.Inject
 
 @AndroidEntryPoint
 class MainActivity : ComponentActivity() {
@@ -47,7 +43,7 @@ fun NavHost(navHostController: NavHostController) {
             MemoListScreen(navController)
         }
         composable(Screen.MemoDetail.route) {
-            MemoDetail(navController)
+            MemoDetailScreen(navController)
         }
     }
 }
