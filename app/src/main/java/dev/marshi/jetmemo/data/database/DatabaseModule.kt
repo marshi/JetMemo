@@ -8,12 +8,13 @@ import dagger.Reusable
 import dagger.hilt.InstallIn
 import dagger.hilt.android.qualifiers.ApplicationContext
 import dagger.hilt.components.SingletonComponent
+import javax.inject.Singleton
 
 @Module
 @InstallIn(SingletonComponent::class)
 object DatabaseModule {
 
-    @Reusable
+    @Singleton
     @Provides
     fun database(
         @ApplicationContext applicationContext: Context

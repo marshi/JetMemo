@@ -3,8 +3,9 @@ package dev.marshi.jetmemo.data.database.entity
 import androidx.room.ColumnInfo
 import androidx.room.Entity
 import androidx.room.PrimaryKey
+import dev.marshi.jetmemo.domain.entity.Memo
 
-@Entity
+@Entity(tableName = "memo")
 data class MemoEntity(
     @PrimaryKey(autoGenerate = true) val id: Int,
     @ColumnInfo(name = "text") val text: String?
@@ -16,5 +17,12 @@ data class MemoEntity(
                 text = text,
             )
         }
+    }
+
+    fun toDomain(): Memo {
+        return Memo(
+            id = id,
+            text = text
+        )
     }
 }

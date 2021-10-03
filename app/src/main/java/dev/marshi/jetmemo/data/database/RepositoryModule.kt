@@ -7,12 +7,13 @@ import dagger.hilt.InstallIn
 import dagger.hilt.components.SingletonComponent
 import dev.marshi.jetmemo.data.database.datasource.MemoDatasource
 import dev.marshi.jetmemo.domain.repository.MemoRepository
+import javax.inject.Singleton
 
 @Module
 @InstallIn(SingletonComponent::class)
 interface RepositoryModule {
 
-    @Reusable
+    @Singleton
     @Binds
     fun memoRepository(memoDatasource: MemoDatasource): MemoRepository
 }
