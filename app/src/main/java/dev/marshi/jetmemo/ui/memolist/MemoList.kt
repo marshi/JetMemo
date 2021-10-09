@@ -37,17 +37,6 @@ fun MemoList(
 ) {
     val state by viewModel.state.collectAsState()
     LazyColumn {
-        repeat(1) {
-            item {
-                MemoLine(
-                    Memo(100, "text"),
-                    modifier = Modifier.clickable {
-                        navController.navigate(
-                            Screen.MemoDetail.route
-                        )
-                    })
-            }
-        }
         state.memos.forEach { memo ->
             item {
                 MemoLine(memo, modifier = Modifier.clickable {
