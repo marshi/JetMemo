@@ -1,8 +1,10 @@
 package dev.marshi.jetmemo.ui.memodetail
 
 import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxHeight
 import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.material.Button
 import androidx.compose.material.Icon
 import androidx.compose.material.IconButton
 import androidx.compose.material.Surface
@@ -51,6 +53,7 @@ fun MemoDetail(
     onSave: (text: String) -> Unit
 ) {
     val memoTextState = remember { mutableStateOf(TextFieldValue(text = state.text)) }
+
     Column {
         TopAppBar(
             title = { Text("title") },
@@ -67,6 +70,10 @@ fun MemoDetail(
                 }
             },
         )
+        Row {
+            RecordStartButton()
+            RecordStopButton()
+        }
         TextField(
             value = memoTextState.value,
             onValueChange = { memoTextState.value = it },
@@ -80,8 +87,37 @@ fun MemoDetail(
 
 @Preview
 @Composable
-fun MemoDetailScreenPreview() {
+fun MemoDetailPreview() {
     JetMemoTheme {
-        MemoDetailScreen(NavControllerWrapperForPreview())
+        MemoDetail(NavControllerWrapperForPreview(), MemoDetailScreenState.INITIAL, onSave = {})
+    }
+}
+
+@Composable
+fun RecordStartButton(viewModel: MemoDetailViewModel = hiltViewModel()) {
+    RecordStartButton() {
+        viewModel.startRecording("file")
+    }
+}
+
+@Composable
+fun RecordStartButton(onClick: () -> Unit) {
+    Button(onClick = onClick) {
+        Text("録音開始")
+    }
+}
+
+
+@Composable
+fun RecordStopButton(viewModel: MemoDetailViewModel = hiltViewModel()) {
+    RecordStopButton {
+        viewModel.stopRecording()
+    }
+}
+
+@Composable
+fun RecordStopButton(onClick: () -> Unit) {
+    Button(onClick = onClick) {
+        Text("録音停止")
     }
 }
