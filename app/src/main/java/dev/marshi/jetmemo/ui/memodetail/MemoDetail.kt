@@ -26,7 +26,6 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.hilt.navigation.compose.hiltViewModel
 import dev.marshi.jetmemo.ui.NavControllerWrapper
 import dev.marshi.jetmemo.ui.NavControllerWrapperForPreview
-import dev.marshi.jetmemo.ui.theme.JetMemoTheme
 
 @Composable
 fun MemoDetailScreen(
@@ -38,6 +37,12 @@ fun MemoDetailScreen(
     Surface {
         MemoDetail(
             navControllerWrapper,
+            recordButtons = {
+                RecordButtons(
+                    onStart = { viewModel.startRecording("file") },
+                    onStop = { viewModel.stopRecording() }
+                )
+            },
             state,
             onSave = {
                 viewModel.saveNewMemo(it)
@@ -49,6 +54,7 @@ fun MemoDetailScreen(
 @Composable
 fun MemoDetail(
     navControllerWrapper: NavControllerWrapper,
+    recordButtons: @Composable () -> Unit,
     state: MemoDetailScreenState,
     onSave: (text: String) -> Unit
 ) {
@@ -70,10 +76,7 @@ fun MemoDetail(
                 }
             },
         )
-        Row {
-            RecordStartButton()
-            RecordStopButton()
-        }
+        recordButtons()
         TextField(
             value = memoTextState.value,
             onValueChange = { memoTextState.value = it },
@@ -81,43 +84,36 @@ fun MemoDetail(
                 .fillMaxWidth()
                 .fillMaxHeight()
         )
-        Text("detail")
+    }
+}
+
+@Composable
+fun RecordButtons(onStart: () -> Unit = {}, onStop: () -> Unit = {}) {
+    Row {
+        Button(onClick = onStart) {
+            Text("録音開始")
+        }
+        Button(onClick = onStop) {
+            Text("録音停止")
+        }
     }
 }
 
 @Preview
 @Composable
+fun RecordButtonPreview() {
+    RecordButtons()
+}
+
+@Preview
+@Composable
 fun MemoDetailPreview() {
-    JetMemoTheme {
-        MemoDetail(NavControllerWrapperForPreview(), MemoDetailScreenState.INITIAL, onSave = {})
-    }
-}
-
-@Composable
-fun RecordStartButton(viewModel: MemoDetailViewModel = hiltViewModel()) {
-    RecordStartButton() {
-        viewModel.startRecording("file")
-    }
-}
-
-@Composable
-fun RecordStartButton(onClick: () -> Unit) {
-    Button(onClick = onClick) {
-        Text("録音開始")
-    }
-}
-
-
-@Composable
-fun RecordStopButton(viewModel: MemoDetailViewModel = hiltViewModel()) {
-    RecordStopButton {
-        viewModel.stopRecording()
-    }
-}
-
-@Composable
-fun RecordStopButton(onClick: () -> Unit) {
-    Button(onClick = onClick) {
-        Text("録音停止")
+    Surface {
+        MemoDetail(
+            navControllerWrapper = NavControllerWrapperForPreview(),
+            recordButtons = { RecordButtons() },
+            state = MemoDetailScreenState.INITIAL,
+            onSave = {}
+        )
     }
 }
