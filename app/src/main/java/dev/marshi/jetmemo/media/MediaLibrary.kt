@@ -1,14 +1,9 @@
-package dev.marshi.jetmemo.recorder
+package dev.marshi.jetmemo.media
 
 import android.content.Context
-import android.content.Intent
-import android.content.res.AssetFileDescriptor
 import android.media.MediaMetadataRetriever
-import android.os.ParcelFileDescriptor
 import android.support.v4.media.MediaMetadataCompat
-import androidx.core.net.toUri
 import java.io.File
-import java.io.FileOutputStream
 
 object MediaLibrary {
 

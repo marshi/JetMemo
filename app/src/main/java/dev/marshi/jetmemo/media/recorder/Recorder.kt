@@ -1,4 +1,4 @@
-package dev.marshi.jetmemo.recorder
+package dev.marshi.jetmemo.media.recorder
 
 import android.content.Context
 import android.media.MediaRecorder

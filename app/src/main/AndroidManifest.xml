@@ -27,7 +27,7 @@
         </activity>
 
         <service
-            android:name=".recorder.MediaPlaybackService"
+            android:name="dev.marshi.jetmemo.media.player.MediaPlaybackService"
             android:exported="false">
             <intent-filter>
                 <action android:name="android.media.browse.MediaBrowserService" />

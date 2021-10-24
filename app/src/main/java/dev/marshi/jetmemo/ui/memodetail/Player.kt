@@ -1,6 +1,5 @@
 package dev.marshi.jetmemo.ui.memodetail
 
-import android.app.Activity
 import android.content.ComponentName
 import android.support.v4.media.MediaBrowserCompat
 import android.support.v4.media.session.MediaControllerCompat
@@ -24,8 +23,7 @@ import androidx.compose.ui.platform.LocalLifecycleOwner
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.lifecycle.Lifecycle
 import androidx.lifecycle.LifecycleEventObserver
-import androidx.lifecycle.LifecycleOwner
-import dev.marshi.jetmemo.recorder.MediaPlaybackService
+import dev.marshi.jetmemo.media.player.MediaPlaybackService
 import dev.marshi.jetmemo.utils.extractActivity
 
 @Composable
@@ -37,7 +35,7 @@ fun Player(
 
     val context = LocalContext.current
     val activity = context.extractActivity()
-    var mediaBrowser: MediaBrowserCompat? = null
+    lateinit var mediaBrowser: MediaBrowserCompat
 
     val subscriptionCallback = object : MediaBrowserCompat.SubscriptionCallback() {
 
@@ -49,28 +47,28 @@ fun Player(
         }
     }
 
-
     val connectionCallback = object : MediaBrowserCompat.ConnectionCallback() {
         override fun onConnected() {
             // https://developer.android.google.cn/guide/topics/media-apps/audio-app/building-a-mediabrowser-client?hl=ja#connect-to-mediabrowserservice
             MediaControllerCompat.setMediaController(
                 activity,
-                MediaControllerCompat(context, mediaBrowser!!.sessionToken)
+                MediaControllerCompat(context, mediaBrowser.sessionToken)
             )
-            mediaBrowser!!.subscribe(mediaBrowser!!.root, subscriptionCallback)
+            mediaBrowser.subscribe(mediaBrowser.root, subscriptionCallback)
         }
     }
-
-    mediaBrowser = MediaBrowserCompat(
-        LocalContext.current,
-        ComponentName(LocalContext.current, MediaPlaybackService::class.java),
-        connectionCallback,
-        null
-    )
 
     val observer = remember {
         LifecycleEventObserver { owner, event ->
             when (event) {
+                Lifecycle.Event.ON_CREATE -> {
+                    mediaBrowser = MediaBrowserCompat(
+                        activity,
+                        ComponentName(activity, MediaPlaybackService::class.java),
+                        connectionCallback,
+                        null
+                    )
+                }
                 Lifecycle.Event.ON_START -> mediaBrowser.connect()
                 Lifecycle.Event.ON_STOP -> {
 //                    MediaControllerCompat.getMediaController(activity).unregisterCallback()

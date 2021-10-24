@@ -1,13 +1,12 @@
-package dev.marshi.jetmemo.recorder
+package dev.marshi.jetmemo.media.player
 
 import android.content.Context
 import android.content.Intent
 import android.media.MediaPlayer
 import android.support.v4.media.session.MediaSessionCompat
 import androidx.media.MediaBrowserServiceCompat
+import dev.marshi.jetmemo.media.MediaLibrary
 import java.io.FileInputStream
-import java.io.FileOutputStream
-import java.io.OutputStream
 
 class MediaSessionCompatCallback(
     private val service: MediaBrowserServiceCompat,
