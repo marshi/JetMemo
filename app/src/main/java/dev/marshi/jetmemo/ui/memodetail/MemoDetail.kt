@@ -1,10 +1,10 @@
 package dev.marshi.jetmemo.ui.memodetail
 
+import android.support.v4.media.session.MediaControllerCompat
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
-import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.layout.wrapContentWidth
 import androidx.compose.material.Button
 import androidx.compose.material.Icon
@@ -17,7 +17,6 @@ import androidx.compose.material.TopAppBar
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.ArrowBack
 import androidx.compose.material.icons.filled.PlayArrow
-import androidx.compose.material.icons.outlined.Star
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
@@ -26,12 +25,14 @@ import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.text.input.TextFieldValue
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.Dp
 import androidx.hilt.navigation.compose.hiltViewModel
 import dev.marshi.jetmemo.ui.NavControllerWrapper
 import dev.marshi.jetmemo.ui.NavControllerWrapperForPreview
+import dev.marshi.jetmemo.utils.extractActivity
 
 @Composable
 fun MemoDetailScreen(
@@ -39,6 +40,7 @@ fun MemoDetailScreen(
     viewModel: MemoDetailViewModel = hiltViewModel()
 ) {
     val state by viewModel.state.collectAsState()
+    val activity = LocalContext.current.extractActivity()
 
     Surface {
         MemoDetail(
@@ -47,6 +49,17 @@ fun MemoDetailScreen(
                 RecordButtons(
                     onStart = { viewModel.startRecording("file") },
                     onStop = { viewModel.stopRecording() }
+                )
+            },
+            player = {
+                Player(
+                    onStart = {
+                        MediaControllerCompat.getMediaController(activity).transportControls.play()
+                    }, onStop = {
+                        MediaControllerCompat.getMediaController(activity).transportControls.stop()
+                    }, onPause = {
+                        MediaControllerCompat.getMediaController(activity).transportControls.pause()
+                    }
                 )
             },
             state,
@@ -61,6 +74,7 @@ fun MemoDetailScreen(
 fun MemoDetail(
     navControllerWrapper: NavControllerWrapper,
     recordButtons: @Composable () -> Unit,
+    player: @Composable () -> Unit,
     state: MemoDetailScreenState,
     onSave: (text: String) -> Unit
 ) {
@@ -90,7 +104,7 @@ fun MemoDetail(
                 .fillMaxWidth()
                 .weight(1f)
         )
-        Player()
+        player()
     }
 }
 
@@ -102,32 +116,6 @@ fun RecordButtons(onStart: () -> Unit = {}, onStop: () -> Unit = {}) {
         }
         Button(onClick = onStop) {
             Text("録音停止")
-        }
-    }
-}
-
-@Composable
-fun Player() {
-    Surface {
-        Row(modifier = Modifier.fillMaxWidth()) {
-            Button(modifier = Modifier
-                .align(Alignment.CenterVertically)
-                .weight(1f), onClick = {}) {
-                Text("一時停止")
-            }
-            IconButton(
-                modifier = Modifier
-                    .align(Alignment.CenterVertically)
-                    .wrapContentWidth()
-                    .weight(1f),
-                onClick = { /*TODO*/ }) {
-                Icon(Icons.Filled.PlayArrow, null)
-            }
-            Button(modifier = Modifier
-                .align(Alignment.CenterVertically)
-                .weight(1f), onClick = {}) {
-                Text("停止")
-            }
         }
     }
 }
@@ -145,14 +133,9 @@ fun MemoDetailPreview() {
         MemoDetail(
             navControllerWrapper = NavControllerWrapperForPreview(),
             recordButtons = { RecordButtons() },
+            player = { Player(onStart = {}, onStop = {}, onPause = {}) },
             state = MemoDetailScreenState.INITIAL,
             onSave = {}
         )
     }
-}
-
-@Preview
-@Composable
-fun PlayerPreview() {
-    Player()
 }

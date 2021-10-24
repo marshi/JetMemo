@@ -14,7 +14,7 @@ class Recorder @Inject constructor(
     var recorder: MediaRecorder? = null
 
     fun start(fileName: String) {
-        val filePath = "${context.externalCacheDir?.absolutePath}/${fileName}.3gp"
+        val filePath = "${context.externalCacheDir?.absolutePath}/record_1.3gp"
 
         val recorder = MediaRecorder().apply {
             setAudioSource(MediaRecorder.AudioSource.MIC)
