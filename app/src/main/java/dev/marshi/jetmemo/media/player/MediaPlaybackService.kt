@@ -11,24 +11,25 @@ import dev.marshi.jetmemo.media.MediaLibrary
 class MediaPlaybackService : MediaBrowserServiceCompat() {
 
     private lateinit var stateBuilder: PlaybackStateCompat.Builder
-    private val mediaSession: MediaSessionCompat
-        get() = MediaSessionCompat(
-            baseContext,
-            MediaPlaybackService::class.simpleName!!
-        )
+    private lateinit var mediaSession: MediaSessionCompat
+
     private val mediaPlayer = MediaPlayer()
-    private val mediaSessionCompatCallback: MediaSessionCompatCallback
-        get() = MediaSessionCompatCallback(
+    private val mediaSessionCompatCallback: MediaSessionCompatCallback by lazy {
+        MediaSessionCompatCallback(
             this,
             baseContext,
             mediaPlayer,
-            mediaSession
+            { mediaSession }
         )
+    }
 
     override fun onCreate() {
         super.onCreate()
         // https://developer.android.google.cn/guide/topics/media-apps/working-with-a-media-session?hl=ja#init-session
-        mediaSession.apply {
+        mediaSession = MediaSessionCompat(
+            baseContext,
+            MediaPlaybackService::class.simpleName!!
+        ).apply {
             stateBuilder = PlaybackStateCompat.Builder()
             stateBuilder.setActions(
                 PlaybackStateCompat.ACTION_PLAY or PlaybackStateCompat.ACTION_PLAY_PAUSE
@@ -37,6 +38,7 @@ class MediaPlaybackService : MediaBrowserServiceCompat() {
             setCallback(mediaSessionCompatCallback)
             setSessionToken(sessionToken)
         }
+        mediaPlayer.setOnCompletionListener(mediaSessionCompatCallback)
     }
 
     override fun onGetRoot(
