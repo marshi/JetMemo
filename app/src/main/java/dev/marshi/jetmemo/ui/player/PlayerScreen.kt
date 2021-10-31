@@ -6,6 +6,7 @@ import android.support.v4.media.MediaBrowserCompat
 import android.support.v4.media.session.MediaControllerCompat
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.DisposableEffect
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.collectAsState
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.platform.LocalLifecycleOwner
@@ -14,6 +15,8 @@ import androidx.lifecycle.LifecycleEventObserver
 import androidx.lifecycle.viewmodel.compose.viewModel
 import dev.marshi.jetmemo.media.player.MediaPlaybackService
 import dev.marshi.jetmemo.utils.extractActivity
+import kotlinx.coroutines.flow.collect
+import kotlinx.coroutines.flow.launchIn
 
 @Composable
 fun PlayerScreen(
@@ -30,19 +33,33 @@ fun PlayerScreen(
             lifecycle.removeObserver(lifecycleEventObserver)
         }
     }
+    LaunchedEffect(key1 = Unit) {
+        viewModel.event.collect { event ->
+            onReceiveEvent(event, activity)
+        }
+    }
     val playerState = viewModel.state.collectAsState(initial = PlayerState(PlayerState.Type.PLAY))
     Player(
         playerState = playerState.value,
         onStart = {
-            MediaControllerCompat.getMediaController(activity).transportControls.play()
+            viewModel.play()
         },
         onStop = {
-            MediaControllerCompat.getMediaController(activity).transportControls.stop()
+            viewModel.stop()
         },
         onPause = {
-            MediaControllerCompat.getMediaController(activity).transportControls.pause()
+            viewModel.pause()
         }
     )
+}
+
+private fun onReceiveEvent(event: PlayerEvent, activity: Activity) {
+    val transportControls = MediaControllerCompat.getMediaController(activity).transportControls
+    when (event) {
+        PlayerEvent.Play -> transportControls.play()
+        PlayerEvent.Pause -> transportControls.pause()
+        PlayerEvent.Stop -> transportControls.stop()
+    }
 }
 
 private fun lifecycleEventObserver(
