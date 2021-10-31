@@ -41,15 +41,9 @@ fun PlayerScreen(
     val playerState = viewModel.state.collectAsState(initial = PlayerState(PlayerState.Type.PLAY))
     Player(
         playerState = playerState.value,
-        onStart = {
-            viewModel.play()
-        },
-        onStop = {
-            viewModel.stop()
-        },
-        onPause = {
-            viewModel.pause()
-        }
+        onStart = { viewModel.play() },
+        onStop = { viewModel.stop() },
+        onPause = { viewModel.pause() }
     )
 }
 
@@ -73,7 +67,7 @@ private fun lifecycleEventObserver(
                 mediaBrowser = MediaBrowserCompat(
                     activity,
                     ComponentName(activity, MediaPlaybackService::class.java),
-                    connectionCallback(activity, mediaControllerCallback) { mediaBrowser },
+                    ConnectionCallback(activity, mediaControllerCallback) { mediaBrowser },
                     null
                 )
             }
@@ -88,35 +82,4 @@ private fun lifecycleEventObserver(
         }
     }
     return lifecycleEventObserver
-}
-
-private fun connectionCallback(
-    activity: Activity,
-    mediaControllerCallback: MediaControllerCallback,
-    mediaBrowser: () -> MediaBrowserCompat,
-): MediaBrowserCompat.ConnectionCallback {
-    val subscriptionCallback = object : MediaBrowserCompat.SubscriptionCallback() {
-        override fun onChildrenLoaded(
-            parentId: String,
-            children: MutableList<MediaBrowserCompat.MediaItem>
-        ) {
-            MediaControllerCompat.getMediaController(activity)?.transportControls?.prepare()
-        }
-    }
-
-    val connectionCallback = object : MediaBrowserCompat.ConnectionCallback() {
-        override fun onConnected() {
-            // https://developer.android.google.cn/guide/topics/media-apps/audio-app/building-a-mediabrowser-client?hl=ja#connect-to-mediabrowserservice
-            val mediaBrowser = mediaBrowser()
-            val mediaController = MediaControllerCompat(activity, mediaBrowser.sessionToken)
-            MediaControllerCompat.setMediaController(
-                activity,
-                mediaController
-            )
-            MediaControllerCompat.getMediaController(activity)
-                .registerCallback(mediaControllerCallback)
-            mediaBrowser.subscribe(mediaBrowser.root, subscriptionCallback)
-        }
-    }
-    return connectionCallback
 }
