@@ -1,6 +1,5 @@
 package dev.marshi.jetmemo.ui.memodetail
 
-import android.support.v4.media.MediaBrowserCompat
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxWidth
@@ -29,10 +28,7 @@ import androidx.compose.ui.unit.Dp
 import androidx.hilt.navigation.compose.hiltViewModel
 import dev.marshi.jetmemo.ui.NavControllerWrapper
 import dev.marshi.jetmemo.ui.NavControllerWrapperForPreview
-import dev.marshi.jetmemo.ui.player.Player
 import dev.marshi.jetmemo.ui.player.PlayerScreen
-import dev.marshi.jetmemo.ui.player.PlayerState
-import dev.marshi.jetmemo.utils.extractActivity
 
 @Composable
 fun MemoDetailScreen(
@@ -40,10 +36,6 @@ fun MemoDetailScreen(
     viewModel: MemoDetailViewModel = hiltViewModel()
 ) {
     val state by viewModel.state.collectAsState()
-    val context = LocalContext.current
-    val activity = context.extractActivity()
-    lateinit var mediaBrowser: MediaBrowserCompat
-
     Surface {
         MemoDetail(
             navControllerWrapper,

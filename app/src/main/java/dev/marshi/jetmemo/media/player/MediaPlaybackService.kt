@@ -37,6 +37,7 @@ class MediaPlaybackService : MediaBrowserServiceCompat() {
             setPlaybackState(stateBuilder.build())
             setCallback(mediaSessionCompatCallback)
             setSessionToken(sessionToken)
+
         }
         mediaPlayer.setOnCompletionListener(mediaSessionCompatCallback)
     }

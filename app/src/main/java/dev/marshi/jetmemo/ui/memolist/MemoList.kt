@@ -21,6 +21,8 @@ import dev.marshi.jetmemo.domain.entity.Memo
 import dev.marshi.jetmemo.ui.NavControllerWrapper
 import dev.marshi.jetmemo.ui.NavControllerWrapperForPreview
 import dev.marshi.jetmemo.ui.Screen
+import dev.marshi.jetmemo.ui.player.Player
+import dev.marshi.jetmemo.ui.player.PlayerScreen
 import dev.marshi.jetmemo.ui.theme.JetMemoTheme
 import dev.marshi.jetmemo.utils.collectInLaunchedEffect
 
