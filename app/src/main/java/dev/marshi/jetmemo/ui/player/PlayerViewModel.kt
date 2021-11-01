@@ -36,10 +36,4 @@ class PlayerViewModel : ViewModel() {
             _event.emit(PlayerEvent.Pause)
         }
     }
-
-    fun stop() {
-        viewModelScope.launch {
-            _event.emit(PlayerEvent.Stop)
-        }
-    }
 }

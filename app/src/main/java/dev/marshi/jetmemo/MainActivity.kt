@@ -6,6 +6,7 @@ import androidx.activity.compose.setContent
 import androidx.compose.material.MaterialTheme
 import androidx.compose.material.Surface
 import androidx.compose.runtime.*
+import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.navigation.NavHostController
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
@@ -16,6 +17,7 @@ import dev.marshi.jetmemo.ui.Screen
 import dev.marshi.jetmemo.ui.memodetail.MemoDetail
 import dev.marshi.jetmemo.ui.memodetail.MemoDetailScreen
 import dev.marshi.jetmemo.ui.memolist.MemoListScreen
+import dev.marshi.jetmemo.ui.memolist.RealMemoListViewModel
 import dev.marshi.jetmemo.ui.theme.JetMemoTheme
 
 @AndroidEntryPoint
@@ -40,7 +42,7 @@ fun NavHost(navHostController: NavHostController) {
     NavHost(navController = navHostController, startDestination = Screen.MemoList.route) {
         val navController = NavControllerWrapperImpl(navHostController)
         composable(Screen.MemoList.route) {
-            MemoListScreen(navController)
+            MemoListScreen(navController, hiltViewModel<RealMemoListViewModel>())
         }
         composable(Screen.MemoDetail.route) {
             MemoDetailScreen(navController)

@@ -1,8 +1,14 @@
 package dev.marshi.jetmemo.ui.memolist
 
 import androidx.compose.foundation.clickable
+import androidx.compose.foundation.layout.Arrangement
+import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.layout.height
+import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.wrapContentHeight
 import androidx.compose.foundation.lazy.LazyColumn
+import androidx.compose.material.Card
 import androidx.compose.material.FloatingActionButton
 import androidx.compose.material.Icon
 import androidx.compose.material.Scaffold
@@ -15,14 +21,12 @@ import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.tooling.preview.Preview
+import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
-import androidx.navigation.compose.rememberNavController
 import dev.marshi.jetmemo.domain.entity.Memo
 import dev.marshi.jetmemo.ui.NavControllerWrapper
 import dev.marshi.jetmemo.ui.NavControllerWrapperForPreview
 import dev.marshi.jetmemo.ui.Screen
-import dev.marshi.jetmemo.ui.player.Player
-import dev.marshi.jetmemo.ui.player.PlayerScreen
 import dev.marshi.jetmemo.ui.theme.JetMemoTheme
 import dev.marshi.jetmemo.utils.collectInLaunchedEffect
 
@@ -36,7 +40,6 @@ fun MemoListScreen(
             is MemoListEffect.NavigateToDetail -> navController.navigate(Screen.MemoDetail.route)
         }
     }
-
     Scaffold(
         floatingActionButton = {
             FloatingActionButton(onClick = { viewModel.navigateToDetail() })
@@ -62,7 +65,12 @@ fun MemoList(
     viewModel: MemoListViewModel
 ) {
     val state by viewModel.state.collectAsState()
-    LazyColumn {
+    LazyColumn(
+        verticalArrangement = Arrangement.spacedBy(4.dp)
+    ) {
+        item {
+            MemoSection(state.memos.size)
+        }
         state.memos.forEach { memo ->
             item {
                 MemoLine(memo, modifier = Modifier.clickable {
@@ -76,21 +84,44 @@ fun MemoList(
 }
 
 @Composable
+fun MemoSection(size: Int) {
+    Text("${size}件のメモ", Modifier.padding(start = 12f.dp, top = 8f.dp, bottom = 8f.dp))
+}
+
+@Composable
 fun MemoLine(
     memo: Memo,
     modifier: Modifier = Modifier
 ) {
-    Surface(
-        modifier = modifier.fillMaxWidth()
+    Card(
+        modifier = modifier
+            .padding(horizontal = 4.dp)
+            .height(40f.dp)
+            .fillMaxWidth(),
     ) {
-        Text(text = memo.textOrDefault)
+        Column(
+            verticalArrangement = Arrangement.Center,
+            modifier = Modifier.padding(start = 12f.dp)
+        ) {
+            Text(modifier = Modifier.wrapContentHeight(), text = memo.textOrDefault)
+        }
     }
+}
+
+@Preview
+@Composable
+fun MemoLinePreview() {
+    MemoLine(memo = Memo(1, "aiueoaiuo"))
 }
 
 @Preview(showBackground = true)
 @Composable
 fun DefaultPreview() {
+    val memos: List<Memo> = (1..10).map { index ->
+        Memo(index, "memo_line_$index")
+    }
+    val state = MemoListScreenState(memos)
     JetMemoTheme {
-        MemoListScreen(NavControllerWrapperForPreview())
+        MemoListScreen(NavControllerWrapperForPreview(), FakeMemoListViewModel(state))
     }
 }
