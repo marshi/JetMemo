@@ -3,20 +3,19 @@ package dev.marshi.jetmemo.ui.player
 import android.app.Activity
 import android.support.v4.media.session.MediaControllerCompat
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.CompositionLocalProvider
 import androidx.compose.runtime.DisposableEffect
 import androidx.compose.runtime.collectAsState
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.platform.LocalLifecycleOwner
 import androidx.compose.ui.tooling.preview.Preview
-import androidx.hilt.navigation.compose.hiltViewModel
 import dev.marshi.jetmemo.utils.collectInLaunchedEffect
 import dev.marshi.jetmemo.utils.extractActivity
 
 @Composable
-fun PlayerScreen(
-    viewModel: PlayerViewModel = hiltViewModel<RealPlayerViewModel>(),
-) {
+fun PlayerScreen() {
     val context = LocalContext.current
+    val viewModel = playerViewModel()
     context.extractActivity()?.let { activity ->
         val lifecycleEventObserver = JetMemoLifecycleEventObserver(
             activity,
@@ -53,5 +52,9 @@ private fun onReceiveEvent(event: PlayerEvent, activity: Activity) {
 @Preview
 @Composable
 fun PlayerScreenPreview() {
-    PlayerScreen(FakePlayerViewModel(playerState = PlayerState()))
+    CompositionLocalProvider(
+        providePlayerViewModel { FakePlayerViewModel(playerState = PlayerState()) }
+    ) {
+        PlayerScreen()
+    }
 }

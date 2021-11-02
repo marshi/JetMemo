@@ -7,6 +7,7 @@ import androidx.compose.material.MaterialTheme
 import androidx.compose.material.Surface
 import androidx.compose.runtime.*
 import androidx.hilt.navigation.compose.hiltViewModel
+import androidx.lifecycle.ViewModelProvider
 import androidx.navigation.NavHostController
 import androidx.navigation.NavType
 import androidx.navigation.compose.NavHost
@@ -15,6 +16,7 @@ import androidx.navigation.compose.rememberNavController
 import androidx.navigation.navArgument
 import dagger.hilt.android.AndroidEntryPoint
 import dev.marshi.jetmemo.ui.NavControllerWrapperImpl
+import dev.marshi.jetmemo.ui.ProvideViewModels
 import dev.marshi.jetmemo.ui.Screen
 import dev.marshi.jetmemo.ui.common.navGraph
 import dev.marshi.jetmemo.ui.memodetail.MemoDetail
@@ -33,7 +35,9 @@ class MainActivity : ComponentActivity() {
             JetMemoTheme {
                 // A surface container using the 'background' color from the theme
                 Surface(color = MaterialTheme.colors.background) {
-                    NavHost(navHostController = navController)
+                    ProvideViewModels {
+                        NavHost(navHostController = navController)
+                    }
                 }
             }
         }
@@ -43,7 +47,6 @@ class MainActivity : ComponentActivity() {
 @Composable
 fun NavHost(navHostController: NavHostController) {
     NavHost(navController = navHostController, startDestination = Screen.MemoList.route) {
-        val navController = NavControllerWrapperImpl(navHostController)
         navGraph(navHostController)
     }
 }

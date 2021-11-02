@@ -15,6 +15,7 @@ import androidx.compose.material.TopAppBar
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.ArrowBack
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.CompositionLocalProvider
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
@@ -23,11 +24,16 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.text.input.TextFieldValue
 import androidx.compose.ui.tooling.preview.Preview
+import androidx.compose.ui.tooling.preview.PreviewParameter
+import androidx.compose.ui.tooling.preview.PreviewParameterProvider
 import androidx.compose.ui.unit.Dp
 import androidx.navigation.NavHostController
 import androidx.navigation.compose.rememberNavController
 import dev.marshi.jetmemo.domain.entity.MemoId
+import dev.marshi.jetmemo.ui.player.FakePlayerViewModel
 import dev.marshi.jetmemo.ui.player.PlayerScreen
+import dev.marshi.jetmemo.ui.player.PlayerState
+import dev.marshi.jetmemo.ui.player.providePlayerViewModel
 
 @Composable
 fun MemoDetailScreen(
@@ -111,12 +117,16 @@ fun RecordButtonPreview() {
 @Preview
 @Composable
 fun MemoDetailPreview() {
-    Surface {
-        MemoDetail(
-            navControllerWrapper = rememberNavController(),
-            recordButtons = { RecordButtons() },
-            state = MemoDetailScreenState.INITIAL,
-            onSave = {}
-        )
+    CompositionLocalProvider(
+        providePlayerViewModel { FakePlayerViewModel(playerState = PlayerState()) }
+    ) {
+        Surface {
+            MemoDetail(
+                navControllerWrapper = rememberNavController(),
+                recordButtons = { RecordButtons() },
+                state = MemoDetailScreenState.INITIAL,
+                onSave = {}
+            )
+        }
     }
 }
