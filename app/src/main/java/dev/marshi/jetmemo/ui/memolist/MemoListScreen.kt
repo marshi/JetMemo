@@ -23,16 +23,21 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
+import androidx.navigation.NavController
+import androidx.navigation.NavHostController
+import androidx.navigation.compose.rememberNavController
 import dev.marshi.jetmemo.domain.entity.Memo
+import dev.marshi.jetmemo.domain.entity.MemoId
 import dev.marshi.jetmemo.ui.NavControllerWrapper
 import dev.marshi.jetmemo.ui.NavControllerWrapperForPreview
 import dev.marshi.jetmemo.ui.Screen
+import dev.marshi.jetmemo.ui.common.navigateToMemoDetail
 import dev.marshi.jetmemo.ui.theme.JetMemoTheme
 import dev.marshi.jetmemo.utils.collectInLaunchedEffect
 
 @Composable
 fun MemoListScreen(
-    navController: NavControllerWrapper,
+    navController: NavHostController,
     viewModel: MemoListViewModel = hiltViewModel()
 ) {
     viewModel.effect.collectInLaunchedEffect { effect ->
@@ -45,9 +50,10 @@ fun MemoListScreen(
             FloatingActionButton(onClick = { viewModel.navigateToDetail() })
         }
     ) {
+        val state: MemoListScreenState by viewModel.state.collectAsState()
         MemoList(
-            navController,
-            viewModel
+            navigate = { screen -> navController.navigateToMemoDetail(MemoId.from(1)) },
+            state
         )
     }
 }
@@ -59,12 +65,12 @@ fun FloatingActionButton(onClick: () -> Unit) {
     }
 }
 
+// stateless
 @Composable
 fun MemoList(
-    navController: NavControllerWrapper,
-    viewModel: MemoListViewModel
+    navigate: (Screen) -> Unit,
+    state: MemoListScreenState
 ) {
-    val state by viewModel.state.collectAsState()
     LazyColumn(
         verticalArrangement = Arrangement.spacedBy(4.dp)
     ) {
@@ -74,9 +80,7 @@ fun MemoList(
         state.memos.forEach { memo ->
             item {
                 MemoLine(memo, modifier = Modifier.clickable {
-                    navController.navigate(
-                        Screen.MemoDetail.route
-                    )
+                    navigate(Screen.MemoDetail)
                 })
             }
         }
@@ -111,17 +115,17 @@ fun MemoLine(
 @Preview
 @Composable
 fun MemoLinePreview() {
-    MemoLine(memo = Memo(1, "aiueoaiuo"))
+    MemoLine(memo = Memo(MemoId.from(1), "aiueoaiuo"))
 }
 
 @Preview(showBackground = true)
 @Composable
 fun DefaultPreview() {
     val memos: List<Memo> = (1..10).map { index ->
-        Memo(index, "memo_line_$index")
+        Memo(MemoId.from(0), "memo_line_$index")
     }
     val state = MemoListScreenState(memos)
     JetMemoTheme {
-        MemoListScreen(NavControllerWrapperForPreview(), FakeMemoListViewModel(state))
+        MemoListScreen(rememberNavController(), FakeMemoListViewModel(state))
     }
 }

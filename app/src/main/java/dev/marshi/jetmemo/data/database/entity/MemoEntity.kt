@@ -4,6 +4,7 @@ import androidx.room.ColumnInfo
 import androidx.room.Entity
 import androidx.room.PrimaryKey
 import dev.marshi.jetmemo.domain.entity.Memo
+import dev.marshi.jetmemo.domain.entity.MemoId
 
 @Entity(tableName = "memo")
 data class MemoEntity(
@@ -21,7 +22,7 @@ data class MemoEntity(
 
     fun toDomain(): Memo {
         return Memo(
-            id = id,
+            id = MemoId.from(id),
             text = text
         )
     }

@@ -1,39 +1,17 @@
 package dev.marshi.jetmemo.ui.player
 
 import android.support.v4.media.session.PlaybackStateCompat
-import androidx.lifecycle.ViewModel
-import androidx.lifecycle.viewModelScope
-import kotlinx.coroutines.flow.MutableSharedFlow
+import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.SharedFlow
-import kotlinx.coroutines.flow.filterNotNull
-import kotlinx.coroutines.flow.map
-import kotlinx.coroutines.launch
+import kotlinx.coroutines.flow.StateFlow
 
-class PlayerViewModel : ViewModel() {
+interface PlayerViewModel {
 
-    val controllerCallback = MediaControllerCallback()
+    val controllerCallback: MediaControllerCallback
+    val event: Flow<PlayerEvent>
+    val state: Flow<PlayerState>
 
-    private val _event = MutableSharedFlow<PlayerEvent>()
-    val event: SharedFlow<PlayerEvent> = _event
+    fun play()
 
-    val state = controllerCallback.playbackStateFlow.filterNotNull().map {
-        when (it.state) {
-            PlaybackStateCompat.STATE_PLAYING -> PlayerState(PlayerState.Type.PAUSE)
-            PlaybackStateCompat.STATE_PAUSED -> PlayerState(PlayerState.Type.PLAY)
-            PlaybackStateCompat.STATE_STOPPED -> PlayerState(PlayerState.Type.PLAY)
-            else -> PlayerState(PlayerState.Type.PAUSE)
-        }
-    }
-
-    fun play() {
-        viewModelScope.launch {
-            _event.emit(PlayerEvent.Play)
-        }
-    }
-
-    fun pause() {
-        viewModelScope.launch {
-            _event.emit(PlayerEvent.Pause)
-        }
-    }
+    fun pause()
 }

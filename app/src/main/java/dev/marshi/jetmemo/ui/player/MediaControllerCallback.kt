@@ -7,7 +7,7 @@ import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.callbackFlow
 
-class MediaControllerCallback() : MediaControllerCompat.Callback() {
+open class MediaControllerCallback() : MediaControllerCompat.Callback() {
     private val _playbackStateFlow = MutableStateFlow<PlaybackStateCompat?>(null)
     val playbackStateFlow: StateFlow<PlaybackStateCompat?> = _playbackStateFlow
 

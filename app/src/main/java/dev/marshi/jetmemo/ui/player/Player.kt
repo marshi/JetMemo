@@ -38,14 +38,6 @@ fun Player(
             ) {
                 PlayerIcon(type = playerState.type)
             }
-//            Button(
-//                modifier = Modifier
-//                    .align(Alignment.CenterVertically)
-//                    .weight(1f),
-//                onClick = onStop
-//            ) {
-//                Text("停止")
-//            }
         }
     }
 }

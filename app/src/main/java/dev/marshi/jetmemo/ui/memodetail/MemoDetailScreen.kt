@@ -21,19 +21,19 @@ import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
-import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.text.input.TextFieldValue
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.Dp
-import androidx.hilt.navigation.compose.hiltViewModel
-import dev.marshi.jetmemo.ui.NavControllerWrapper
-import dev.marshi.jetmemo.ui.NavControllerWrapperForPreview
+import androidx.navigation.NavHostController
+import androidx.navigation.compose.rememberNavController
+import dev.marshi.jetmemo.domain.entity.MemoId
 import dev.marshi.jetmemo.ui.player.PlayerScreen
 
 @Composable
 fun MemoDetailScreen(
-    navControllerWrapper: NavControllerWrapper,
-    viewModel: MemoDetailViewModel = hiltViewModel()
+    navControllerWrapper: NavHostController,
+    memoId: MemoId,
+    viewModel: MemoDetailViewModel
 ) {
     val state by viewModel.state.collectAsState()
     Surface {
@@ -55,7 +55,7 @@ fun MemoDetailScreen(
 
 @Composable
 fun MemoDetail(
-    navControllerWrapper: NavControllerWrapper,
+    navControllerWrapper: NavHostController,
     recordButtons: @Composable () -> Unit,
     state: MemoDetailScreenState,
     onSave: (text: String) -> Unit
@@ -113,7 +113,7 @@ fun RecordButtonPreview() {
 fun MemoDetailPreview() {
     Surface {
         MemoDetail(
-            navControllerWrapper = NavControllerWrapperForPreview(),
+            navControllerWrapper = rememberNavController(),
             recordButtons = { RecordButtons() },
             state = MemoDetailScreenState.INITIAL,
             onSave = {}

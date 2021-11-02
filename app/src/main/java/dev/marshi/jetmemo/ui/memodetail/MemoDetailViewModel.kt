@@ -1,35 +1,14 @@
 package dev.marshi.jetmemo.ui.memodetail
 
-import androidx.lifecycle.ViewModel
-import androidx.lifecycle.viewModelScope
-import dagger.hilt.android.lifecycle.HiltViewModel
-import dev.marshi.jetmemo.domain.repository.MemoRepository
-import dev.marshi.jetmemo.media.recorder.Recorder
-import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
-import kotlinx.coroutines.launch
-import javax.inject.Inject
 
-@HiltViewModel
-class MemoDetailViewModel @Inject constructor(
-    private val memoRepository: MemoRepository,
-    private val recorder: Recorder
-) : ViewModel() {
+interface MemoDetailViewModel {
 
-    private val _state = MutableStateFlow(MemoDetailScreenState.INITIAL)
-    val state: StateFlow<MemoDetailScreenState> = _state
+    val state: StateFlow<MemoDetailScreenState>
 
-    fun saveNewMemo(text: String) {
-        viewModelScope.launch {
-            memoRepository.add(text)
-        }
-    }
+    fun saveNewMemo(text: String)
 
-    fun startRecording(fileName: String) {
-        recorder.start("record_1")
-    }
+    fun startRecording(fileName: String)
 
-    fun stopRecording() {
-        recorder.stop()
-    }
+    fun stopRecording()
 }

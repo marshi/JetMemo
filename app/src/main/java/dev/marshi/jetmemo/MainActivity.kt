@@ -8,12 +8,15 @@ import androidx.compose.material.Surface
 import androidx.compose.runtime.*
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.navigation.NavHostController
+import androidx.navigation.NavType
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
+import androidx.navigation.navArgument
 import dagger.hilt.android.AndroidEntryPoint
 import dev.marshi.jetmemo.ui.NavControllerWrapperImpl
 import dev.marshi.jetmemo.ui.Screen
+import dev.marshi.jetmemo.ui.common.navGraph
 import dev.marshi.jetmemo.ui.memodetail.MemoDetail
 import dev.marshi.jetmemo.ui.memodetail.MemoDetailScreen
 import dev.marshi.jetmemo.ui.memolist.MemoListScreen
@@ -41,12 +44,7 @@ class MainActivity : ComponentActivity() {
 fun NavHost(navHostController: NavHostController) {
     NavHost(navController = navHostController, startDestination = Screen.MemoList.route) {
         val navController = NavControllerWrapperImpl(navHostController)
-        composable(Screen.MemoList.route) {
-            MemoListScreen(navController, hiltViewModel<RealMemoListViewModel>())
-        }
-        composable(Screen.MemoDetail.route) {
-            MemoDetailScreen(navController)
-        }
+        navGraph(navHostController)
     }
 }
 
