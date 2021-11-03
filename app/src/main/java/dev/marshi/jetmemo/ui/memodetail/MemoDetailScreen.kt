@@ -18,14 +18,9 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.CompositionLocalProvider
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
-import androidx.compose.runtime.mutableStateOf
-import androidx.compose.runtime.remember
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
-import androidx.compose.ui.text.input.TextFieldValue
 import androidx.compose.ui.tooling.preview.Preview
-import androidx.compose.ui.tooling.preview.PreviewParameter
-import androidx.compose.ui.tooling.preview.PreviewParameterProvider
 import androidx.compose.ui.unit.Dp
 import androidx.navigation.NavHostController
 import androidx.navigation.compose.rememberNavController
@@ -51,8 +46,8 @@ fun MemoDetailScreen(
                 )
             },
             state,
-            onSave = {
-                viewModel.saveNewMemo(it)
+            onSave = { memoId, text ->
+                viewModel.saveMemo(memoId, text = text)
             },
             onValueChanged = {
                 viewModel.textValueChanged(it)
@@ -66,7 +61,7 @@ fun MemoDetail(
     navControllerWrapper: NavHostController,
     recordButtons: @Composable () -> Unit,
     state: MemoDetailScreenState,
-    onSave: (text: String) -> Unit,
+    onSave: (memoid: MemoId?, text: String) -> Unit,
     onValueChanged: (String) -> Unit
 ) {
     Column {
@@ -80,7 +75,7 @@ fun MemoDetail(
                 }
             },
             actions = {
-                TextButton(onClick = { onSave(state.text) }) {
+                TextButton(onClick = { onSave(state.memoId, state.text) }) {
                     Text("保存", color = Color.Black)
                 }
             },
@@ -126,7 +121,7 @@ fun MemoDetailPreview() {
                 navControllerWrapper = rememberNavController(),
                 recordButtons = { RecordButtons() },
                 state = MemoDetailScreenState.INITIAL,
-                onSave = {},
+                onSave = { _, _ -> },
                 onValueChanged = {}
             )
         }

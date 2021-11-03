@@ -12,9 +12,9 @@ data class MemoEntity(
     @ColumnInfo(name = "text") val text: String?
 ) {
     companion object {
-        fun from(text: String): MemoEntity {
+        fun from(id: Int? = null, text: String): MemoEntity {
             return MemoEntity(
-                id = 0,
+                id = id ?: 0,
                 text = text,
             )
         }

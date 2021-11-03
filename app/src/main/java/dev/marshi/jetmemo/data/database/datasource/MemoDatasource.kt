@@ -12,9 +12,13 @@ import javax.inject.Inject
 class MemoDatasource @Inject constructor(
     private val db: AppDatabase
 ) : MemoRepository {
+    override suspend fun update(memoId: MemoId, text: String) {
+        val entity = MemoEntity.from(id = memoId.value, text = text)
+        db.memoDao().update(entity)
+    }
 
     override suspend fun add(text: String) {
-        val entity = MemoEntity.from(text)
+        val entity = MemoEntity.from(text = text)
         db.memoDao().insert(entity)
     }
 

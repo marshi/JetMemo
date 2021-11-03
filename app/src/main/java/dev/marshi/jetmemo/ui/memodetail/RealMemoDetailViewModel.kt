@@ -33,9 +33,13 @@ class RealMemoDetailViewModel @Inject constructor(
         }
     }
 
-    override fun saveNewMemo(text: String) {
+    override fun saveMemo(id: MemoId?, text: String) {
         viewModelScope.launch {
-            memoRepository.add(text)
+            if (id == null) {
+                memoRepository.add(text)
+            } else {
+                memoRepository.update(id, text)
+            }
         }
     }
 
