@@ -3,6 +3,7 @@ package dev.marshi.jetmemo.ui.memodetail
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import dagger.hilt.android.lifecycle.HiltViewModel
+import dev.marshi.jetmemo.domain.entity.MemoId
 import dev.marshi.jetmemo.domain.repository.MemoRepository
 import dev.marshi.jetmemo.media.recorder.Recorder
 import kotlinx.coroutines.flow.MutableStateFlow
@@ -18,6 +19,19 @@ class RealMemoDetailViewModel @Inject constructor(
 
     private val _state = MutableStateFlow(MemoDetailScreenState.INITIAL)
     override val state: StateFlow<MemoDetailScreenState> = _state
+
+    fun init(memoId: MemoId) {
+        viewModelScope.launch {
+            val memo = memoRepository.find(memoId) ?: return@launch
+            _state.value = _state.value.copy(memoId = memoId, text = memo.textOrDefault)
+        }
+    }
+
+    override fun textValueChanged(text: String) {
+        viewModelScope.launch {
+            _state.value = _state.value.copy(text = text)
+        }
+    }
 
     override fun saveNewMemo(text: String) {
         viewModelScope.launch {

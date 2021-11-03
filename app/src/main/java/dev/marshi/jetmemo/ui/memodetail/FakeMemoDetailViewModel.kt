@@ -12,6 +12,8 @@ class FakeMemoDetailViewModel(
 
     override fun saveNewMemo(text: String) {}
 
+    override fun textValueChanged(text: String) {}
+
     override fun startRecording(fileName: String) {}
 
     override fun stopRecording() {}

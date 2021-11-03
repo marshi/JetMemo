@@ -38,7 +38,6 @@ import dev.marshi.jetmemo.ui.player.providePlayerViewModel
 @Composable
 fun MemoDetailScreen(
     navControllerWrapper: NavHostController,
-    memoId: MemoId,
     viewModel: MemoDetailViewModel
 ) {
     val state by viewModel.state.collectAsState()
@@ -54,6 +53,9 @@ fun MemoDetailScreen(
             state,
             onSave = {
                 viewModel.saveNewMemo(it)
+            },
+            onValueChanged = {
+                viewModel.textValueChanged(it)
             }
         )
     }
@@ -64,10 +66,9 @@ fun MemoDetail(
     navControllerWrapper: NavHostController,
     recordButtons: @Composable () -> Unit,
     state: MemoDetailScreenState,
-    onSave: (text: String) -> Unit
+    onSave: (text: String) -> Unit,
+    onValueChanged: (String) -> Unit
 ) {
-    val memoTextState = remember { mutableStateOf(TextFieldValue(text = state.text)) }
-
     Column {
         TopAppBar(
             title = { Text("title") },
@@ -79,15 +80,15 @@ fun MemoDetail(
                 }
             },
             actions = {
-                TextButton(onClick = { onSave(memoTextState.value.text) }) {
+                TextButton(onClick = { onSave(state.text) }) {
                     Text("保存", color = Color.Black)
                 }
             },
         )
         recordButtons()
         TextField(
-            value = memoTextState.value,
-            onValueChange = { memoTextState.value = it },
+            value = state.text,
+            onValueChange = { onValueChanged(it) },
             modifier = Modifier
                 .fillMaxWidth()
                 .weight(1f)
@@ -125,7 +126,8 @@ fun MemoDetailPreview() {
                 navControllerWrapper = rememberNavController(),
                 recordButtons = { RecordButtons() },
                 state = MemoDetailScreenState.INITIAL,
-                onSave = {}
+                onSave = {},
+                onValueChanged = {}
             )
         }
     }

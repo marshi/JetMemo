@@ -14,4 +14,7 @@ interface MemoDao {
 
     @Query("select * from memo")
     fun selectAll(): Flow<List<MemoEntity>>
+
+    @Query("select * from memo where id = :id")
+    suspend fun select(id: Int): MemoEntity?
 }

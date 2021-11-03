@@ -3,6 +3,7 @@ package dev.marshi.jetmemo.data.database.datasource
 import dev.marshi.jetmemo.data.database.AppDatabase
 import dev.marshi.jetmemo.data.database.entity.MemoEntity
 import dev.marshi.jetmemo.domain.entity.Memo
+import dev.marshi.jetmemo.domain.entity.MemoId
 import dev.marshi.jetmemo.domain.repository.MemoRepository
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.map
@@ -19,5 +20,9 @@ class MemoDatasource @Inject constructor(
 
     override fun list(): Flow<List<Memo>> {
         return db.memoDao().selectAll().map { list -> list.map { it.toDomain() } }
+    }
+
+    override suspend fun find(memoId: MemoId): Memo? {
+        return db.memoDao().select(memoId.value)?.toDomain()
     }
 }

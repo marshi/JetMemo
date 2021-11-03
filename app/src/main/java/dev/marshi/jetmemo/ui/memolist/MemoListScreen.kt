@@ -52,7 +52,7 @@ fun MemoListScreen(
     ) {
         val state: MemoListScreenState by viewModel.state.collectAsState()
         MemoList(
-            navigate = { screen -> navController.navigateToMemoDetail(MemoId.from(1)) },
+            navigate = { memoId -> navController.navigateToMemoDetail(memoId) },
             state
         )
     }
@@ -68,7 +68,7 @@ fun FloatingActionButton(onClick: () -> Unit) {
 // stateless
 @Composable
 fun MemoList(
-    navigate: (Screen) -> Unit,
+    navigate: (MemoId) -> Unit,
     state: MemoListScreenState
 ) {
     LazyColumn(
@@ -80,7 +80,7 @@ fun MemoList(
         state.memos.forEach { memo ->
             item {
                 MemoLine(memo, modifier = Modifier.clickable {
-                    navigate(Screen.MemoDetail)
+                    navigate(memo.id)
                 })
             }
         }

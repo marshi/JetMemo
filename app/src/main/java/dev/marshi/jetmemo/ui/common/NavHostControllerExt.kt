@@ -31,6 +31,8 @@ fun NavGraphBuilder.navGraph(
         )
     ) {
         val memoId = requireNotNull(it.arguments).getInt("memoId").let { MemoId.from(it) }
-        MemoDetailScreen(navController, memoId, hiltViewModel<RealMemoDetailViewModel>())
+        MemoDetailScreen(
+            navController,
+            hiltViewModel<RealMemoDetailViewModel>().apply { init(memoId) })
     }
 }

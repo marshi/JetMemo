@@ -8,6 +8,8 @@ interface MemoDetailViewModel {
 
     fun saveNewMemo(text: String)
 
+    fun textValueChanged(text: String)
+
     fun startRecording(fileName: String)
 
     fun stopRecording()
