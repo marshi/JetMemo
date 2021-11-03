@@ -27,13 +27,30 @@ class RealMemoDetailViewModel @Inject constructor(
         }
     }
 
-    override fun textValueChanged(text: String) {
+    override fun dispatch(event: MemoDetailViewModel.Event) {
+        when (event) {
+            is MemoDetailViewModel.Event.StartRecording -> {
+                recorder.start(event.fileName)
+            }
+            MemoDetailViewModel.Event.StopRecording -> {
+                recorder.stop()
+            }
+            is MemoDetailViewModel.Event.SaveMemo -> {
+                saveMemo(event.id, event.text)
+            }
+            is MemoDetailViewModel.Event.ChangeText -> {
+                changeText(event.text)
+            }
+        }
+    }
+
+    private fun changeText(text: String) {
         viewModelScope.launch {
             _state.value = _state.value.copy(text = text)
         }
     }
 
-    override fun saveMemo(id: MemoId?, text: String) {
+    private fun saveMemo(id: MemoId?, text: String) {
         viewModelScope.launch {
             if (id == null) {
                 memoRepository.add(text)
@@ -41,13 +58,5 @@ class RealMemoDetailViewModel @Inject constructor(
                 memoRepository.update(id, text)
             }
         }
-    }
-
-    override fun startRecording(fileName: String) {
-        recorder.start("record_1")
-    }
-
-    override fun stopRecording() {
-        recorder.stop()
     }
 }

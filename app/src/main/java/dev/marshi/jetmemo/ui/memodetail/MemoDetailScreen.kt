@@ -41,8 +41,12 @@ fun MemoDetailScreen(
             navControllerWrapper,
             recordButtons = {
                 RecordButtons(
-                    onStart = { viewModel.startRecording("file") },
-                    onStop = { viewModel.stopRecording() }
+                    onStart = {
+                        viewModel.dispatch(MemoDetailViewModel.Event.StartRecording("file"))
+                    },
+                    onStop = {
+                        viewModel.dispatch(MemoDetailViewModel.Event.StopRecording)
+                    }
                 )
             },
             state,
@@ -50,7 +54,7 @@ fun MemoDetailScreen(
                 viewModel.saveMemo(memoId, text = text)
             },
             onValueChanged = {
-                viewModel.textValueChanged(it)
+                viewModel.changeText(it)
             }
         )
     }

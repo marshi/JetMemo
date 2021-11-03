@@ -1,17 +1,19 @@
 package dev.marshi.jetmemo.ui.memodetail
 
 import dev.marshi.jetmemo.domain.entity.MemoId
+import kotlinx.coroutines.flow.MutableSharedFlow
 import kotlinx.coroutines.flow.StateFlow
 
 interface MemoDetailViewModel {
 
     val state: StateFlow<MemoDetailScreenState>
 
-    fun saveMemo(id: MemoId? = null, text: String)
+    fun dispatch(event: Event)
 
-    fun textValueChanged(text: String)
-
-    fun startRecording(fileName: String)
-
-    fun stopRecording()
+    sealed class Event {
+        class StartRecording(val fileName: String) : Event()
+        object StopRecording : Event()
+        class SaveMemo(val id: MemoId?, val text: String) : Event()
+        class ChangeText(val text: String) : Event()
+    }
 }

@@ -10,8 +10,5 @@ class FakeMemoDetailViewModel(
 ) : MemoDetailViewModel, ViewModel() {
 
     override val state: StateFlow<MemoDetailScreenState> = MutableStateFlow(state)
-    override fun saveMemo(id: MemoId?, text: String) {}
-    override fun textValueChanged(text: String) {}
-    override fun startRecording(fileName: String) {}
-    override fun stopRecording() {}
+    override fun dispatch(event: MemoDetailViewModel.Event) {}
 }
