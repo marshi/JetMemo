@@ -32,13 +32,13 @@ import dev.marshi.jetmemo.ui.player.providePlayerViewModel
 
 @Composable
 fun MemoDetailScreen(
-    navControllerWrapper: NavHostController,
+    navController: NavHostController,
     viewModel: MemoDetailViewModel
 ) {
     val state by viewModel.state.collectAsState()
     Surface {
         MemoDetail(
-            navControllerWrapper,
+            state,
             recordButtons = {
                 RecordButtons(
                     onStart = {
@@ -49,12 +49,14 @@ fun MemoDetailScreen(
                     }
                 )
             },
-            state,
             onSave = { memoId, text ->
-                viewModel.saveMemo(memoId, text = text)
+                viewModel.dispatch(MemoDetailViewModel.Event.SaveMemo(memoId, text = text))
             },
             onValueChanged = {
-                viewModel.changeText(it)
+                viewModel.dispatch(MemoDetailViewModel.Event.ChangeText(it))
+            },
+            onBackNavigation = {
+                navController.popBackStack()
             }
         )
     }
@@ -62,18 +64,18 @@ fun MemoDetailScreen(
 
 @Composable
 fun MemoDetail(
-    navControllerWrapper: NavHostController,
-    recordButtons: @Composable () -> Unit,
     state: MemoDetailScreenState,
-    onSave: (memoid: MemoId?, text: String) -> Unit,
-    onValueChanged: (String) -> Unit
+    recordButtons: @Composable () -> Unit,
+    onSave: (MemoId?, String) -> Unit,
+    onValueChanged: (String) -> Unit,
+    onBackNavigation: () -> Unit,
 ) {
     Column {
         TopAppBar(
             title = { Text("title") },
             navigationIcon = {
                 IconButton(onClick = {
-                    navControllerWrapper.popBackStack()
+                    onBackNavigation()
                 }) {
                     Icon(Icons.Filled.ArrowBack, null)
                 }
@@ -122,11 +124,11 @@ fun MemoDetailPreview() {
     ) {
         Surface {
             MemoDetail(
-                navControllerWrapper = rememberNavController(),
                 recordButtons = { RecordButtons() },
                 state = MemoDetailScreenState.INITIAL,
                 onSave = { _, _ -> },
-                onValueChanged = {}
+                onValueChanged = {},
+                onBackNavigation = {}
             )
         }
     }

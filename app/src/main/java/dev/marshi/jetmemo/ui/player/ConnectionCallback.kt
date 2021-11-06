@@ -21,13 +21,13 @@ class ConnectionCallback(
     override fun onConnected() {
         // https://developer.android.google.cn/guide/topics/media-apps/audio-app/building-a-mediabrowser-client?hl=ja#connect-to-mediabrowserservice
         val mediaBrowser = mediaBrowser()
-        val mediaController = MediaControllerCompat(activity, mediaBrowser.sessionToken)
+        val mediaController = MediaControllerCompat(activity, mediaBrowser.sessionToken).apply {
+            registerCallback(mediaControllerCallback)
+        }
         MediaControllerCompat.setMediaController(
             activity,
             mediaController
         )
-        MediaControllerCompat.getMediaController(activity)
-            .registerCallback(mediaControllerCallback)
         mediaBrowser.subscribe(mediaBrowser.root, subscriptionCallback)
     }
 }
