@@ -7,7 +7,6 @@ import androidx.navigation.NavType
 import androidx.navigation.compose.composable
 import androidx.navigation.navArgument
 import dev.marshi.jetmemo.domain.entity.MemoId
-import dev.marshi.jetmemo.ui.NavControllerWrapper
 import dev.marshi.jetmemo.ui.Screen
 import dev.marshi.jetmemo.ui.memodetail.MemoDetailScreen
 import dev.marshi.jetmemo.ui.memodetail.RealMemoDetailViewModel

@@ -8,6 +8,7 @@ import kotlinx.coroutines.flow.StateFlow
 interface MemoDetailViewModel {
 
     val state: StateFlow<MemoDetailScreenState>
+    val effect: Flow<Effect>
 
     fun dispatch(event: Event)
 
@@ -16,5 +17,9 @@ interface MemoDetailViewModel {
         object StopRecording : Event()
         class SaveMemo(val id: MemoId?, val text: String) : Event()
         class ChangeText(val text: String) : Event()
+    }
+
+    sealed class Effect {
+        object ShowSaveToast : Effect()
     }
 }

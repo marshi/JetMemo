@@ -6,6 +6,9 @@ import dagger.hilt.android.lifecycle.HiltViewModel
 import dev.marshi.jetmemo.domain.entity.MemoId
 import dev.marshi.jetmemo.domain.repository.MemoRepository
 import dev.marshi.jetmemo.media.recorder.Recorder
+import kotlinx.coroutines.channels.Channel
+import kotlinx.coroutines.flow.Flow
+import kotlinx.coroutines.flow.MutableSharedFlow
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.launch
@@ -19,6 +22,8 @@ class RealMemoDetailViewModel @Inject constructor(
 
     private val _state = MutableStateFlow(MemoDetailScreenState.INITIAL)
     override val state: StateFlow<MemoDetailScreenState> = _state
+    private val _effect = MutableSharedFlow<MemoDetailViewModel.Effect>()
+    override val effect: Flow<MemoDetailViewModel.Effect> = _effect
 
     fun init(memoId: MemoId) {
         viewModelScope.launch {
@@ -28,18 +33,21 @@ class RealMemoDetailViewModel @Inject constructor(
     }
 
     override fun dispatch(event: MemoDetailViewModel.Event) {
-        when (event) {
-            is MemoDetailViewModel.Event.StartRecording -> {
-                recorder.start(event.fileName)
-            }
-            MemoDetailViewModel.Event.StopRecording -> {
-                recorder.stop()
-            }
-            is MemoDetailViewModel.Event.SaveMemo -> {
-                saveMemo(event.id, event.text)
-            }
-            is MemoDetailViewModel.Event.ChangeText -> {
-                changeText(event.text)
+        viewModelScope.launch {
+            when (event) {
+                is MemoDetailViewModel.Event.StartRecording -> {
+                    recorder.start(event.fileName)
+                }
+                MemoDetailViewModel.Event.StopRecording -> {
+                    recorder.stop()
+                }
+                is MemoDetailViewModel.Event.SaveMemo -> {
+                    saveMemo(event.id, event.text)
+                    _effect.emit(MemoDetailViewModel.Effect.ShowSaveToast)
+                }
+                is MemoDetailViewModel.Event.ChangeText -> {
+                    changeText(event.text)
+                }
             }
         }
     }
