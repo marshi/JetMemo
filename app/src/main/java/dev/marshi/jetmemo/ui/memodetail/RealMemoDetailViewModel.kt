@@ -46,7 +46,7 @@ class RealMemoDetailViewModel @Inject constructor(
                 }
                 is MemoDetailViewModel.Event.SaveMemo -> {
                     saveMemo(state.value.memoId, state.value.text)
-                    _effect.tryEmit(MemoDetailViewModel.Effect.ShowSaveToast)
+                    _effect.emit(MemoDetailViewModel.Effect.ShowSaveToast)
                 }
                 is MemoDetailViewModel.Event.ChangeText -> {
                     changeText(event.text)

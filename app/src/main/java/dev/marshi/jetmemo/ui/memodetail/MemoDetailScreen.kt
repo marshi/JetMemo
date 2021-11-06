@@ -54,23 +54,13 @@ fun MemoDetailScreen(
             state,
             recordButtons = {
                 RecordButtons(
-                    onStart = {
-                        viewModel.dispatch(Event.StartRecording("file"))
-                    },
-                    onStop = {
-                        viewModel.dispatch(Event.StopRecording)
-                    }
+                    onStart = { viewModel.dispatch(Event.StartRecording("file")) },
+                    onStop = { viewModel.dispatch(Event.StopRecording) }
                 )
             },
-            onSave = {
-                viewModel.dispatch(Event.SaveMemo())
-            },
-            onValueChanged = {
-                viewModel.dispatch(Event.ChangeText(it))
-            },
-            onBackNavigation = {
-                navController.popBackStack()
-            }
+            onSave = { viewModel.dispatch(Event.SaveMemo()) },
+            onValueChanged = { viewModel.dispatch(Event.ChangeText(it)) },
+            onBackNavigation = { navController.popBackStack() }
         )
     }
 }

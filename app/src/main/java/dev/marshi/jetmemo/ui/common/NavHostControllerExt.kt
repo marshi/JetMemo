@@ -38,10 +38,11 @@ fun NavGraphBuilder.navGraph(
         arguments = listOf(
             navArgument("memoId") { type = NavType.LongType }
         )
-    ) {
-        val memoId = requireNotNull(it.arguments).getLong("memoId").let { MemoId.from(it) }
+    ) { backStack ->
+        val memoId = requireNotNull(backStack.arguments).getLong("memoId").let { MemoId.from(it) }
         MemoDetailScreen(
             navController,
-            hiltViewModel<RealMemoDetailViewModel>().apply { init(memoId) })
+            hiltViewModel<RealMemoDetailViewModel>().apply { init(memoId) }
+        )
     }
 }
