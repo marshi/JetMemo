@@ -13,8 +13,12 @@ import dev.marshi.jetmemo.ui.memodetail.RealMemoDetailViewModel
 import dev.marshi.jetmemo.ui.memolist.MemoListScreen
 import dev.marshi.jetmemo.ui.memolist.RealMemoListViewModel
 
-fun NavHostController.navigateToMemoDetail(id: MemoId) {
-    navigate("${Screen.MemoDetail.route}/${id.value}")
+fun NavHostController.navigateToMemoDetail(id: MemoId?) {
+    if (id != null) {
+        navigate("${Screen.MemoDetail.route}/${id.value}")
+    } else {
+        navigate(Screen.MemoDetail.route)
+    }
 }
 
 fun NavGraphBuilder.navGraph(
@@ -22,6 +26,12 @@ fun NavGraphBuilder.navGraph(
 ) {
     composable(Screen.MemoList.route) {
         MemoListScreen(navController, hiltViewModel<RealMemoListViewModel>())
+    }
+    composable(Screen.MemoDetail.route) {
+        MemoDetailScreen(
+            navController,
+            hiltViewModel<RealMemoDetailViewModel>()
+        )
     }
     composable(
         "${Screen.MemoDetail.route}/{memoId}",

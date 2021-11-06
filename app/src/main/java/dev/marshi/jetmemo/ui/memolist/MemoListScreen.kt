@@ -37,7 +37,9 @@ fun MemoListScreen(
 ) {
     Scaffold(
         floatingActionButton = {
-            FloatingActionButton(onClick = { navController.navigate(Screen.MemoDetail.route) })
+            FloatingActionButton(
+                onClick = { navController.navigateToMemoDetail(null) }
+            )
         }
     ) {
         val state: MemoListScreenState by viewModel.state.collectAsState()
