@@ -4,8 +4,6 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import dagger.hilt.android.lifecycle.HiltViewModel
 import dev.marshi.jetmemo.domain.repository.MemoRepository
-import kotlinx.coroutines.flow.Flow
-import kotlinx.coroutines.flow.MutableSharedFlow
 import kotlinx.coroutines.flow.SharingStarted
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.collect
@@ -20,8 +18,6 @@ class RealMemoListViewModel @Inject constructor(
 ) : MemoListViewModel, ViewModel() {
 
     private val memos = memoRepository.list()
-    private var _effect = MutableSharedFlow<MemoListEffect>()
-    override val effect: Flow<MemoListEffect> = _effect
     override val state: StateFlow<MemoListScreenState> = memos
         .map { memos ->
             MemoListScreenState(memos)
@@ -36,12 +32,6 @@ class RealMemoListViewModel @Inject constructor(
             memos.collect {
                 println(it)
             }
-        }
-    }
-
-    override fun navigateToDetail() {
-        viewModelScope.launch {
-            _effect.emit(MemoListEffect.NavigateToDetail)
         }
     }
 }

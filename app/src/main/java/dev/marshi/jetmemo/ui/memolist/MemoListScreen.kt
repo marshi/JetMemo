@@ -12,7 +12,6 @@ import androidx.compose.material.Card
 import androidx.compose.material.FloatingActionButton
 import androidx.compose.material.Icon
 import androidx.compose.material.Scaffold
-import androidx.compose.material.Surface
 import androidx.compose.material.Text
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Add
@@ -23,37 +22,28 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
-import androidx.navigation.NavController
 import androidx.navigation.NavHostController
 import androidx.navigation.compose.rememberNavController
 import dev.marshi.jetmemo.domain.entity.Memo
 import dev.marshi.jetmemo.domain.entity.MemoId
-import dev.marshi.jetmemo.ui.NavControllerWrapper
-import dev.marshi.jetmemo.ui.NavControllerWrapperForPreview
 import dev.marshi.jetmemo.ui.Screen
 import dev.marshi.jetmemo.ui.common.navigateToMemoDetail
 import dev.marshi.jetmemo.ui.theme.JetMemoTheme
-import dev.marshi.jetmemo.utils.collectInLaunchedEffect
 
 @Composable
 fun MemoListScreen(
     navController: NavHostController,
     viewModel: MemoListViewModel = hiltViewModel()
 ) {
-    viewModel.effect.collectInLaunchedEffect { effect ->
-        when (effect) {
-            is MemoListEffect.NavigateToDetail -> navController.navigate(Screen.MemoDetail.route)
-        }
-    }
     Scaffold(
         floatingActionButton = {
-            FloatingActionButton(onClick = { viewModel.navigateToDetail() })
+            FloatingActionButton(onClick = { navController.navigate(Screen.MemoDetail.route) })
         }
     ) {
         val state: MemoListScreenState by viewModel.state.collectAsState()
         MemoList(
-            navigate = { memoId -> navController.navigateToMemoDetail(memoId) },
-            state
+            state = state,
+            onNavigateToDetail = { memoId -> navController.navigateToMemoDetail(memoId) },
         )
     }
 }
@@ -68,8 +58,8 @@ fun FloatingActionButton(onClick: () -> Unit) {
 // stateless
 @Composable
 fun MemoList(
-    navigate: (MemoId) -> Unit,
-    state: MemoListScreenState
+    state: MemoListScreenState,
+    onNavigateToDetail: (MemoId) -> Unit,
 ) {
     LazyColumn(
         verticalArrangement = Arrangement.spacedBy(4.dp)
@@ -80,7 +70,7 @@ fun MemoList(
         state.memos.forEach { memo ->
             item {
                 MemoLine(memo, modifier = Modifier.clickable {
-                    navigate(memo.id)
+                    onNavigateToDetail(memo.id)
                 })
             }
         }
