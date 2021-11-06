@@ -23,8 +23,8 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.Dp
 import androidx.navigation.NavHostController
-import androidx.navigation.compose.rememberNavController
 import dev.marshi.jetmemo.domain.entity.MemoId
+import dev.marshi.jetmemo.ui.memodetail.MemoDetailViewModel.Event
 import dev.marshi.jetmemo.ui.player.FakePlayerViewModel
 import dev.marshi.jetmemo.ui.player.PlayerScreen
 import dev.marshi.jetmemo.ui.player.PlayerState
@@ -42,18 +42,18 @@ fun MemoDetailScreen(
             recordButtons = {
                 RecordButtons(
                     onStart = {
-                        viewModel.dispatch(MemoDetailViewModel.Event.StartRecording("file"))
+                        viewModel.dispatch(Event.StartRecording("file"))
                     },
                     onStop = {
-                        viewModel.dispatch(MemoDetailViewModel.Event.StopRecording)
+                        viewModel.dispatch(Event.StopRecording)
                     }
                 )
             },
             onSave = { memoId, text ->
-                viewModel.dispatch(MemoDetailViewModel.Event.SaveMemo(memoId, text = text))
+                viewModel.dispatch(Event.SaveMemo(memoId, text = text))
             },
             onValueChanged = {
-                viewModel.dispatch(MemoDetailViewModel.Event.ChangeText(it))
+                viewModel.dispatch(Event.ChangeText(it))
             },
             onBackNavigation = {
                 navController.popBackStack()

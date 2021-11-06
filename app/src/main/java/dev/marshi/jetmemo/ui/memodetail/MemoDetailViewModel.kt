@@ -1,6 +1,7 @@
 package dev.marshi.jetmemo.ui.memodetail
 
 import dev.marshi.jetmemo.domain.entity.MemoId
+import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.MutableSharedFlow
 import kotlinx.coroutines.flow.StateFlow
 
