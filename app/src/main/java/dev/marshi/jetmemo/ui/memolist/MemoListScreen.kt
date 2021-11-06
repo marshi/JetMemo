@@ -107,14 +107,14 @@ fun MemoLine(
 @Preview
 @Composable
 fun MemoLinePreview() {
-    MemoLine(memo = Memo(MemoId.from(1), "aiueoaiuo"))
+    MemoLine(memo = Memo(MemoId.from(1), "aiueoaiuo", 0, 0))
 }
 
 @Preview(showBackground = true)
 @Composable
 fun DefaultPreview() {
     val memos: List<Memo> = (1..10).map { index ->
-        Memo(MemoId.from(0), "memo_line_$index")
+        Memo(MemoId.from(0), "memo_line_$index", 0, 0)
     }
     val state = MemoListScreenState(memos)
     JetMemoTheme {

@@ -7,16 +7,22 @@ import java.io.File
 
 object MediaLibrary {
 
-    fun getSourceFile(context: Context): File {
+    fun getSourceFile(context: Context): File? {
         val filePath = "${context.externalCacheDir?.absolutePath}/record_1.3gp"
         val file = File(filePath)
-        return file
+        return if (file.exists()) {
+            file
+        } else {
+            null
+        }
     }
 
     fun getMetadata(context: Context): MediaMetadataCompat {
         val retriever = MediaMetadataRetriever().apply {
             val sourceFile = getSourceFile(context)
-            setDataSource(sourceFile.absolutePath)
+            if (sourceFile?.exists() == true) {
+                setDataSource(sourceFile.absolutePath)
+            }
         }
         val meta = retriever.use { retriever ->
             MediaMetadataCompat.Builder()

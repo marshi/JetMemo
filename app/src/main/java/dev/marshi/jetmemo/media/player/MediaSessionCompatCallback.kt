@@ -24,10 +24,12 @@ class MediaSessionCompatCallback(
     override fun onPrepare() {
         mediaSession().setMetadata(MediaLibrary.getMetadata(context))
         mediaPlayer.reset()
-        FileInputStream(MediaLibrary.getSourceFile(context)).use {
-            mediaPlayer.setDataSource(it.fd)
+        MediaLibrary.getSourceFile(context)?.let { file ->
+            FileInputStream(file).use {
+                mediaPlayer.setDataSource(it.fd)
+            }
+            mediaPlayer.prepare()
         }
-        mediaPlayer.prepare()
         setNewState(PlaybackStateCompat.STATE_PAUSED)
     }
 

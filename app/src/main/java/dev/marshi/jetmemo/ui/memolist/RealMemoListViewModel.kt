@@ -20,7 +20,7 @@ class RealMemoListViewModel @Inject constructor(
     private val memos = memoRepository.list()
     override val state: StateFlow<MemoListScreenState> = memos
         .map { memos ->
-            MemoListScreenState(memos)
+            MemoListScreenState(memos.sortedBy { -it.insertedAt })
         }.stateIn(
             viewModelScope,
             started = SharingStarted.Eagerly,

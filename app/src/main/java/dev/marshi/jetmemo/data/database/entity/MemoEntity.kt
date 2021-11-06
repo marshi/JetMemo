@@ -9,13 +9,18 @@ import dev.marshi.jetmemo.domain.entity.MemoId
 @Entity(tableName = "memo")
 data class MemoEntity(
     @PrimaryKey(autoGenerate = true) val id: Int,
-    @ColumnInfo(name = "text") val text: String?
+    @ColumnInfo(name = "text") val text: String?,
+    @ColumnInfo(name = "inserted_at") val insertedAt: Long,
+    @ColumnInfo(name = "updated_at") val updatedAt: Long,
 ) {
     companion object {
         fun from(id: Int? = null, text: String): MemoEntity {
+            val now = System.currentTimeMillis()
             return MemoEntity(
                 id = id ?: 0,
                 text = text,
+                insertedAt = now,
+                updatedAt = now,
             )
         }
     }
@@ -23,7 +28,9 @@ data class MemoEntity(
     fun toDomain(): Memo {
         return Memo(
             id = MemoId.from(id),
-            text = text
+            text = text,
+            insertedAt = insertedAt,
+            updatedAt = System.currentTimeMillis()
         )
     }
 }
