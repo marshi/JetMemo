@@ -36,10 +36,10 @@ fun NavGraphBuilder.navGraph(
     composable(
         "${Screen.MemoDetail.route}/{memoId}",
         arguments = listOf(
-            navArgument("memoId") { type = NavType.IntType }
+            navArgument("memoId") { type = NavType.LongType }
         )
     ) {
-        val memoId = requireNotNull(it.arguments).getInt("memoId").let { MemoId.from(it) }
+        val memoId = requireNotNull(it.arguments).getLong("memoId").let { MemoId.from(it) }
         MemoDetailScreen(
             navController,
             hiltViewModel<RealMemoDetailViewModel>().apply { init(memoId) })

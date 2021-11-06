@@ -11,7 +11,7 @@ import kotlinx.coroutines.flow.Flow
 interface MemoDao {
 
     @Insert
-    suspend fun insert(memoEntity: MemoEntity)
+    suspend fun insert(memoEntity: MemoEntity): Long
 
     @Update
     suspend fun update(memoEntity: MemoEntity)
@@ -20,5 +20,8 @@ interface MemoDao {
     fun selectAll(): Flow<List<MemoEntity>>
 
     @Query("select * from memo where id = :id")
-    suspend fun select(id: Int): MemoEntity?
+    suspend fun select(id: Long): MemoEntity?
+
+    @Query("select * from memo where id = :id")
+    fun observe(id: Long): Flow<MemoEntity?>
 }

@@ -62,8 +62,8 @@ fun MemoDetailScreen(
                     }
                 )
             },
-            onSave = { memoId, text ->
-                viewModel.dispatch(Event.SaveMemo(memoId, text = text))
+            onSave = {
+                viewModel.dispatch(Event.SaveMemo())
             },
             onValueChanged = {
                 viewModel.dispatch(Event.ChangeText(it))
@@ -79,7 +79,7 @@ fun MemoDetailScreen(
 fun MemoDetail(
     state: MemoDetailScreenState,
     recordButtons: @Composable () -> Unit,
-    onSave: (MemoId?, String) -> Unit,
+    onSave: () -> Unit,
     onValueChanged: (String) -> Unit,
     onBackNavigation: () -> Unit,
 ) {
@@ -94,7 +94,7 @@ fun MemoDetail(
                 }
             },
             actions = {
-                TextButton(onClick = { onSave(state.memoId, state.text) }) {
+                TextButton(onClick = { onSave() }) {
                     Text("保存", color = Color.Black)
                 }
             },
@@ -139,7 +139,7 @@ fun MemoDetailPreview() {
             MemoDetail(
                 recordButtons = { RecordButtons() },
                 state = MemoDetailScreenState.INITIAL,
-                onSave = { _, _ -> },
+                onSave = {},
                 onValueChanged = {},
                 onBackNavigation = {}
             )

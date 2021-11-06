@@ -15,7 +15,7 @@ interface MemoDetailViewModel {
     sealed class Event {
         class StartRecording(val fileName: String) : Event()
         object StopRecording : Event()
-        class SaveMemo(val id: MemoId?, val text: String) : Event()
+        class SaveMemo() : Event()
         class ChangeText(val text: String) : Event()
     }
 

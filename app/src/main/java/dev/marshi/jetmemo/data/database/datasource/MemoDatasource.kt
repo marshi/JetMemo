@@ -17,9 +17,9 @@ class MemoDatasource @Inject constructor(
         db.memoDao().update(entity)
     }
 
-    override suspend fun add(text: String) {
+    override suspend fun add(text: String): Long {
         val entity = MemoEntity.from(text = text)
-        db.memoDao().insert(entity)
+        return db.memoDao().insert(entity)
     }
 
     override fun list(): Flow<List<Memo>> {
@@ -28,5 +28,9 @@ class MemoDatasource @Inject constructor(
 
     override suspend fun find(memoId: MemoId): Memo? {
         return db.memoDao().select(memoId.value)?.toDomain()
+    }
+
+    override fun observe(memoId: MemoId): Flow<Memo?> {
+        return db.memoDao().observe(memoId.value).map { it?.toDomain() }
     }
 }
