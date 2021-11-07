@@ -21,10 +21,13 @@ import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.graphics.vector.VectorPainter
 import androidx.compose.ui.platform.LocalContext
+import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.Dp
 import androidx.navigation.NavHostController
+import dev.marshi.jetmemo.R
 import dev.marshi.jetmemo.domain.entity.MemoId
 import dev.marshi.jetmemo.ui.common.ToastUtils
 import dev.marshi.jetmemo.ui.memodetail.MemoDetailViewModel.Event
@@ -77,15 +80,13 @@ fun MemoDetail(
         TopAppBar(
             title = { Text("title") },
             navigationIcon = {
-                IconButton(onClick = {
-                    onBackNavigation()
-                }) {
+                IconButton(onClick = { onBackNavigation() }) {
                     Icon(Icons.Filled.ArrowBack, null)
                 }
             },
             actions = {
-                TextButton(onClick = { onSave() }) {
-                    Text("保存", color = Color.Black)
+                IconButton(onClick = { onSave() }) {
+                    Icon(painterResource(id = R.drawable.baseline_save_24), "save")
                 }
             },
         )

@@ -1,6 +1,5 @@
 package dev.marshi.jetmemo.domain.repository
 
-import dagger.internal.MemoizedSentinel
 import dev.marshi.jetmemo.domain.entity.Memo
 import dev.marshi.jetmemo.domain.entity.MemoId
 import kotlinx.coroutines.flow.Flow

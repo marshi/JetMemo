@@ -99,7 +99,7 @@ fun MemoLine(
             verticalArrangement = Arrangement.Center,
             modifier = Modifier.padding(start = 12f.dp)
         ) {
-            Text(modifier = Modifier.wrapContentHeight(), text = memo.textOrDefault)
+            Text(modifier = Modifier.wrapContentHeight(), text = memo.textForTitle)
         }
     }
 }
