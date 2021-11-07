@@ -19,7 +19,7 @@ class MediaPlaybackService : MediaBrowserServiceCompat() {
             this,
             baseContext,
             mediaPlayer,
-            { mediaSession }
+            mediaSession = { mediaSession }
         )
     }
 
